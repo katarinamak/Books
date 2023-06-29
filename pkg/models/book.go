@@ -13,6 +13,7 @@ type Book struct {
 	Title       string `gorm: "json":"title"`
 	Author      string `json:"author"`
 	Publication string `json:"publication"`
+	Rating      int32  `json:"rating"`
 }
 
 func init() {
@@ -36,6 +37,18 @@ func GetAllBooks() []Book {
 func GetBookById(Id int64) (*Book, *gorm.DB) {
 	var getBook Book
 	db := db.Where("ID=?", Id).Find(&getBook)
+	return &getBook, db
+}
+
+func GetBookByTitle(title string) (*Book, *gorm.DB) {
+	var getBook Book
+	db := db.Where("title=?", title).Find(&getBook)
+	return &getBook, db
+}
+
+func GetBookByRating(rating int32) (*Book, *gorm.DB) {
+	var getBook Book
+	db := db.Where("rating=?", rating).Find(&getBook)
 	return &getBook, db
 }
 

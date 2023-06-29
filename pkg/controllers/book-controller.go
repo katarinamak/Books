@@ -36,6 +36,26 @@ func GetBookById(w http.ResponseWriter, r *http.Request) {
 	w.Write(res)
 }
 
+func GetBookByTitle(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	bookTitle := vars["bookTitle"]
+	bookDetails, _ := models.GetBookByTitle(bookTitle)
+	res, _ := json.Marshal(bookDetails)
+	w.Header().Set("Content-Type", "pkglication/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(res)
+}
+
+func GetBookByRating(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	bookRating := vars["bookRating"]
+	bookDetails, _ := models.GetBookByRating(bookRating)
+	res, _ := json.Marshal(bookDetails)
+	w.Header().Set("Content-Type", "pkglication/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(res)
+}
+
 func CreateBook(w http.ResponseWriter, r *http.Request) {
 	// CreateBook := &models.Book{}
 	// utils.ParseBody(r, CreateBook)
@@ -97,6 +117,9 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	}
 	if updateBook.Publication != "" {
 		bookDetails.Publication = updateBook.Publication
+	}
+	if updateBook.Rating != 0 {
+		bookDetails.Rating = updateBook.Rating
 	}
 	db.Save(&bookDetails)
 	res, _ := json.Marshal(bookDetails)
